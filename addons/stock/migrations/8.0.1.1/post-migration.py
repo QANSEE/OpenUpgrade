@@ -877,7 +877,8 @@ def migrate(cr, version):
         migrate_product_supply_method(cr, registry)
         migrate_procurement_order(cr, registry)
 
-    migrate_stock_qty(cr, registry)
+    # to slow
+    # migrate_stock_qty(cr, registry)
     migrate_stock_production_lot(cr, registry)
 
     # Initiate defaults before filling.

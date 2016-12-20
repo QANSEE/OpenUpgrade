@@ -198,13 +198,13 @@ def migrate(cr, version):
         cr, pool, 'product.product', openupgrade.get_legacy_name('income_pdt'),
         'product_tmpl_id', 'product.template', 'income_pdt',
         compute_func=income_pdt_field_func)
-    openupgrade.move_field_m2o(
-        cr, pool,
-        'product.product', openupgrade.get_legacy_name('pos_categ_id'),
-        'product_tmpl_id', 'product.template', 'pos_categ_id')
+    # openupgrade.move_field_m2o(
+    #     cr, pool,
+    #     'product.product', openupgrade.get_legacy_name('pos_categ_id'),
+    #     'product_tmpl_id', 'product.template', 'pos_categ_id')
     openupgrade.move_field_m2o(
         cr, pool, 'product.product', openupgrade.get_legacy_name('to_weight'),
         'product_tmpl_id', 'product.template', 'to_weight',
         compute_func=to_weight_field_func)
     set_proxy_ip(cr, pool)
-    migrate_pos_config(cr, pool)
+    #migrate_pos_config(cr, pool)

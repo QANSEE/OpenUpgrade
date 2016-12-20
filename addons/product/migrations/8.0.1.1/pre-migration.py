@@ -22,9 +22,9 @@
 from openerp.openupgrade import openupgrade
 
 column_renames = {
-    'product_supplierinfo': [
-        ('product_id', 'product_tmpl_id'),
-    ],
+    # 'product_supplierinfo': [
+    #     ('product_id', 'product_tmpl_id'),
+    # ],
     'product_product': [
         ('color', None),
         ('image', 'image_variant'),

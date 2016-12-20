@@ -61,22 +61,42 @@ def create_properties(cr, pool):
     Write using the ORM so the prices will be written as properties.
     """
     template_obj = pool['product.template']
-    sql = ("SELECT id, %s FROM product_template" %
-           openupgrade.get_legacy_name('standard_price'))
+    sql = """
+    select id from ir_property
+    where fields_id=
+    (select id from ir_model_fields where model_id=(select id from ir_model where model='product.template') and name='standard_price')
+    limit 1
+    """
     cr.execute(sql)
-    logger.info(
-        "Creating product_template.standard_price properties"
-        " for %d products." % (cr.rowcount))
-    for template_id, std_price in cr.fetchall():
-        template_obj.write(cr, SUPERUSER_ID, [template_id],
-                           {'standard_price': std_price})
+    if not cr.rowcount:
+        logger.info("Creating product_template.standard_price properties")
+        sql = """
+        INSERT INTO ir_property
+        (value_float, create_date, name, create_uid, type, company_id, write_uid, fields_id, write_date, res_id)
+        SELECT standard_price, create_date, 'standard_price', create_uid, 'float', 1, write_uid,
+        (select id from ir_model_fields where model_id=(select id from ir_model where model='product.template') and name='standard_price'),
+        write_date, 'product.template'||id
+        """
+        openupgrade.logged_query(cr, sql)
+
+    # sql = ("SELECT id, %s FROM product_template" %
+    #     (openupgrade.get_legacy_name('standard_price'), limit, offset))
+    # cr.execute(sql)
+    # if not cr.rowcount:
+    #     break
+    # logger.info(
+    #     "Creating product_template.standard_price properties"
+    #     " for %d products." % (cr.rowcount)
+    # for template_id, std_price in cr.fetchall():
+    #     template_obj.write(cr, SUPERUSER_ID, [template_id],
+    #                     {'standard_price': std_price})
     # make properties global
-    sql = ("""
-        UPDATE ir_property
-        SET company_id = null
-        WHERE res_id like 'product.template,%%'
-        AND name = 'standard_price'""")
-    openupgrade.logged_query(cr, sql)
+    # sql = ("""
+    #     UPDATE ir_property
+    #     SET company_id = null
+    #     WHERE res_id like 'product.template,%%'
+    #     AND name = 'standard_price'""")
+    # openupgrade.logged_query(cr, sql)
 
     # product.price.history entries have been generated with a value for
     # today, we want a value for the past as well, write a bogus date to
@@ -136,15 +156,17 @@ def active_field_template_func(cr, pool, id, vals):
 def migrate(cr, version):
     pool = pooler.get_pool(cr.dbname)
     get_legacy_name = openupgrade.get_legacy_name
-    openupgrade.move_field_m2o(
-        cr, pool,
-        'product.product', get_legacy_name('color'), 'product_tmpl_id',
-        'product.template', 'color')
-    openupgrade.move_field_m2o(
-        cr, pool,
-        'product.product', 'image_variant', 'product_tmpl_id',
-        'product.template', 'image',
-        quick_request=False, binary_field=True)
+    # no color
+    # openupgrade.move_field_m2o(
+    #     cr, pool,
+    #     'product.product', get_legacy_name('color'), 'product_tmpl_id',
+    #     'product.template', 'color')
+    # no image and to slow
+    # openupgrade.move_field_m2o(
+    #     cr, pool,
+    #     'product.product', 'image_variant', 'product_tmpl_id',
+    #     'product.template', 'image',
+    #     quick_request=False, binary_field=True)
     openupgrade.move_field_m2o(
         cr, pool,
         'product.product', 'active', 'product_tmpl_id',

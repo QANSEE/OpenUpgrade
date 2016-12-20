@@ -23,14 +23,14 @@
 from openerp.openupgrade import openupgrade
 
 column_renames = {
-    'pos_config': [
-        ('shop_id', None),
-        ],
+    # 'pos_config': [
+    #     ('shop_id', None),
+    #     ],
     'product_product': [
         ('available_in_pos', None),
         ('expense_pdt', None),
         ('income_pdt', None),
-        ('pos_categ_id', None),
+    #    ('pos_categ_id', None),
         ('to_weight', None),
     ],
 }

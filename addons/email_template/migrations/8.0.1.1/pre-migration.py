@@ -22,12 +22,12 @@
 from openerp.openupgrade import openupgrade
 
 column_renames = {
-    'email_template': [
-        ('email_recipients', 'partner_to'),
-    ],
-    'ir_act_server': [
-        ('subject', None),
-    ]
+    #'email_template': [
+    #    ('email_recipients', 'partner_to'),
+    #],
+    # 'ir_act_server': [
+    #     ('subject', None),
+    # ]
 }
 
 

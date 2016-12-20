@@ -125,7 +125,7 @@ def set_procurement_groups(cr):
 def migrate(cr, version):
     pool = RegistryManager.get(cr.dbname)
 
-    migrate_warehouse_id(cr)
+    #migrate_warehouse_id(cr)
     openupgrade.warn_possible_dataloss(
         cr, pool, 'sale_stock', possible_dataloss_fields)
 

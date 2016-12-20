@@ -19,7 +19,7 @@ def migrate(cr, version):
     if not version:
         return
     env = Environment(cr, SUPERUSER_ID, {})
-    convert_action_mail_server_email(env)
+    # convert_action_mail_server_email(env)
 
 
 def convert_action_mail_server_email(env):
